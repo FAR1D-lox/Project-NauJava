@@ -10,5 +10,5 @@ public interface CustomChatRepository {
 
     List<User> findStaleOnlineUsers(LocalDateTime dateTime);
 
-    List<Message> findUnreadMessagesByCriteria(Long roomId, String username);
+    List<Message> findUnreadMessages(Long roomId, String username);
 }

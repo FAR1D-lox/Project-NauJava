@@ -118,7 +118,7 @@ class NauJavaApplicationTests {
         message.setSentAt(LocalDateTime.now());
         messageRepository.save(message);
 
-        List<Message> unread = customChatRepository.findUnreadMessagesByCriteria(room.getId(), sender.getUsername());
+        List<Message> unread = customChatRepository.findUnreadMessages(room.getId(), sender.getUsername());
 
         Assertions.assertFalse(unread.isEmpty());
         Assertions.assertEquals(message.getBody(), unread.get(0).getBody());

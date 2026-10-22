@@ -61,4 +61,12 @@ public class Notification {
     public void setMuted(boolean muted) {
         isMuted = muted;
     }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
+    }
 }

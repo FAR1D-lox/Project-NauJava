@@ -3,6 +3,7 @@ package ru.taras_buriachenko.NauJava.repository.criteria;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 import ru.taras_buriachenko.NauJava.entity.Message;
 import ru.taras_buriachenko.NauJava.entity.Room;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@RepositoryRestResource(path="customRepo")
 @Repository
 public class CustomChatRepositoryImpl implements CustomChatRepository {
 
@@ -32,7 +34,7 @@ public class CustomChatRepositoryImpl implements CustomChatRepository {
     }
 
     @Override
-    public List<Message> findUnreadMessagesByCriteria(Long roomId, String username) {
+    public List<Message> findUnreadMessages(Long roomId, String username) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Message> query = cb.createQuery(Message.class);
         Root<Message> message = query.from(Message.class);
