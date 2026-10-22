@@ -3,10 +3,10 @@ package ru.taras_buriachenko.NauJava.dto;
 import java.time.LocalDateTime;
 
 public class UserResponseDto {
-    private Long id;
-    private String username;
-    private LocalDateTime lastSeen;
-    private boolean isOnline;
+    private final Long id;
+    private final String username;
+    private final LocalDateTime lastSeen;
+    private final boolean isOnline;
 
     public UserResponseDto(Long id, String username, LocalDateTime lastSeen, boolean isOnline) {
         this.id = id;

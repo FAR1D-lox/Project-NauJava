@@ -3,14 +3,14 @@ package ru.taras_buriachenko.NauJava.dto;
 import java.time.LocalDateTime;
 
 public class MessageResponseDto {
-    private Long id;
-    private Long senderId;
-    private String senderName;
-    private Long roomId;
-    private String body;
-    private String filePath;
-    private boolean isRead;
-    private LocalDateTime sentAt;
+    private final Long id;
+    private final Long senderId;
+    private final String senderName;
+    private final Long roomId;
+    private final String body;
+    private final String filePath;
+    private final boolean isRead;
+    private final LocalDateTime sentAt;
 
     public MessageResponseDto(Long id, Long senderId, String senderName, Long roomId, String body, String filePath, boolean isRead, LocalDateTime sentAt) {
         this.id = id;

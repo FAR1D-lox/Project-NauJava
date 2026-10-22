@@ -27,6 +27,9 @@ public class Notification {
     @Column(name = "is_muted")
     private boolean isMuted = false;
 
+    @Column(name = "is_read")
+    private boolean isRead = false;
+
     public NotificationId getId() {
         return id;
     }

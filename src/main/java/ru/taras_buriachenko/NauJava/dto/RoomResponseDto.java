@@ -3,10 +3,10 @@ package ru.taras_buriachenko.NauJava.dto;
 import java.time.LocalDateTime;
 
 public class RoomResponseDto {
-    private Long id;
-    private String title;
-    private String type;
-    private LocalDateTime createdAt;
+    private final Long id;
+    private final String title;
+    private final String type;
+    private final LocalDateTime createdAt;
 
     public RoomResponseDto(Long id, String title, String type, LocalDateTime createdAt) {
         this.id = id;

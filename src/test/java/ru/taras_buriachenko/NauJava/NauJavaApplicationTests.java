@@ -130,7 +130,7 @@ class NauJavaApplicationTests {
         String title = "Успешная комната " + UUID.randomUUID().toString().substring(0, 5);
 
         // Положительный кейс: комната и связь с участником должны успешно коммититься
-        Room room = roomService.createRoomWithCreator(title, RoomType.GROUP, creator.getId());
+        Room room = roomService.createRoom(title, RoomType.GROUP, creator.getId());
 
         Assertions.assertNotNull(room);
         Assertions.assertNotNull(room.getId());
@@ -147,7 +147,7 @@ class NauJavaApplicationTests {
         long participantCountBefore = participantRepository.count();
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            roomService.createRoomWithCreator("error_room", RoomType.ONE_ON_ONE, creator.getId());
+            roomService.createRoom("error_room", RoomType.ONE_ON_ONE, creator.getId());
         });
 
         Assertions.assertEquals(roomCountBefore, roomRepository.count());

@@ -1,5 +1,6 @@
 package ru.taras_buriachenko.NauJava.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -37,7 +38,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Room createRoomWithCreator(String title, RoomType type, Long creatorId) {
+    public Room createRoom(String title, RoomType type, Long creatorId) {
 
         TransactionStatus status =
                 transactionManager.getTransaction(new DefaultTransactionDefinition());
@@ -49,7 +50,7 @@ public class RoomServiceImpl implements RoomService {
             room.setCreatedAt(LocalDateTime.now());
             savedRoom = roomRepository.save(room);
 
-            if ("error_room".equals(title)) {
+            if (title == null || title.isEmpty()) {
                 throw new IllegalArgumentException("Invalid room title. Transaction rollback expected.");
             }
 
@@ -61,7 +62,7 @@ public class RoomServiceImpl implements RoomService {
             participant.setId(participantId);
             participant.setRoom(savedRoom);
             participant.setUser(creator);
-            participant.setRole(ParticipantRole.CREATOR);
+            participant.setRole(ParticipantRole.ADMIN);
             participant.setJoinedAt(LocalDateTime.now());
 
             participantRepository.save(participant);
@@ -72,5 +73,28 @@ public class RoomServiceImpl implements RoomService {
         }
 
         return savedRoom;
+    }
+
+    @Override
+    public void removeRoom(Long userId, Long roomId) {
+
+        TransactionStatus status =
+                transactionManager.getTransaction(new DefaultTransactionDefinition());
+        try {
+            Participant participant = participantRepository.findById(new ParticipantId(roomId, userId))
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "User with id = " + userId + " is not participant in the room with id = " + roomId
+                    ));
+            if (!ParticipantRole.ADMIN.equals(participant.getRole())) {
+                throw new IllegalStateException("You haven't enough permissions to delete room");
+            }
+            participantRepository.deleteByRoomId(roomId);
+            roomRepository.deleteById(roomId);
+            transactionManager.commit(status);
+
+        } catch (Exception e) {
+            transactionManager.rollback(status);
+            throw e;
+        }
     }
 }
