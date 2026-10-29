@@ -12,8 +12,12 @@ import ru.taras_buriachenko.NauJava.repository.crud.UserRepository;
 @RequestMapping("/custom/users/view")
 public class UserControllerView {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserControllerView(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
 
     @GetMapping("/list")
     public String userListView(Model model) {

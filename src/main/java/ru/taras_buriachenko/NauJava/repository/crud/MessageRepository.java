@@ -15,7 +15,10 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 
     @Query("SELECT m FROM Message m WHERE m.room.id = :roomId AND m.sender.username = :username AND m.isRead = false")
     List<Message> findUnreadMessagesByRoomAndSender(
-            @Param("roomId") Long roomId,
-            @Param("username") String username
+        @Param("roomId") Long roomId,
+        @Param("username") String username
     );
+
+    @Query("SELECT m FROM Message m JOIN FETCH m.sender WHERE m.room.id = :roomId ORDER BY m.sentAt ASC")
+    List<Message> findRoomMessagesWithSender(@Param("roomId") Long roomId);
 }

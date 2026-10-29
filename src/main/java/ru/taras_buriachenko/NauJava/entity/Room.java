@@ -18,6 +18,7 @@ public class Room {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private RoomType type;
 

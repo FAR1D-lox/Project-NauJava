@@ -8,6 +8,7 @@ public class RoomResponseDto {
     private final String type;
     private final LocalDateTime createdAt;
 
+
     public RoomResponseDto(Long id, String title, String type, LocalDateTime createdAt) {
         this.id = id;
         this.title = title;

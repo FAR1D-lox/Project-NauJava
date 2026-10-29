@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import ru.taras_buriachenko.NauJava.entity.Participant;
 import ru.taras_buriachenko.NauJava.entity.ParticipantId;
 
+import java.util.List;
+
 @RepositoryRestResource(path="participants")
 @Repository
 public interface ParticipantRepository extends CrudRepository<Participant, ParticipantId> {
@@ -15,4 +17,9 @@ public interface ParticipantRepository extends CrudRepository<Participant, Parti
     @Modifying
     @Query("DELETE FROM Participant p WHERE p.id.roomId = :roomId")
     void deleteByRoomId(Long roomId);
+
+    List<Participant> findByIdRoomId(Long roomId);
+
+    List<Participant> findByIdUserId(Long userId);
+
 }

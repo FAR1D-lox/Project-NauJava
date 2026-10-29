@@ -1,6 +1,7 @@
 package ru.taras_buriachenko.NauJava.entity;
 
 import jakarta.persistence.*;
+import ru.taras_buriachenko.NauJava.type.UserRole;
 
 import java.time.LocalDateTime;
 
@@ -11,13 +12,14 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String username, String passwordHash, String phoneNumber, LocalDateTime lastSeen, boolean isOnline) {
+    public User(Long id, String username, String passwordHash, String phoneNumber, LocalDateTime lastSeen, boolean isOnline, UserRole role) {
         this.id = id;
         this.username = username;
         this.passwordHash = passwordHash;
         this.phoneNumber = phoneNumber;
         this.lastSeen = lastSeen;
         this.isOnline = isOnline;
+        this.role = role;
     }
 
     @Id
@@ -38,6 +40,10 @@ public class User {
 
     @Column(name = "is_online", nullable = false)
     private boolean isOnline = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false, columnDefinition = "varchar(255) default 'USER'")
+    private UserRole role;
 
     public Long getId() {
         return id;
@@ -67,6 +73,10 @@ public class User {
         return phoneNumber;
     }
 
+    public UserRole getRole() {
+        return role;
+    }
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -85,6 +95,10 @@ public class User {
 
     public void setOnline(boolean online) {
         isOnline = online;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     @Override

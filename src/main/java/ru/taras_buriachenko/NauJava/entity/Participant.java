@@ -25,6 +25,8 @@ public class Participant {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
     private ParticipantRole role;
 
     @Column(name = "joined_at")
