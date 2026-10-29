@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${room.title}">Чат</title>
+    <style>
+        body { max-width: 900px; margin: 30px auto; font-family: sans-serif; }
+        .message { padding: 10px; margin: 8px 0; background: #f3f3f3; border-radius: 6px; }
+        .message-meta { color: #666; font-size: .85em; }
+        .error { color: #a00; }
+        textarea { width: 100%; min-height: 70px; }
+    </style>
+</head>
+<body>
+<p><a th:href="@{/home}">← Все комнаты</a></p>
+<h1 th:text="${room.title}">Название комнаты</h1>
+<p>Тип комнаты: <span th:text="${room.type}">GROUP</span></p>
+
+<p class="error" th:if="${chatError}" th:text="${chatError}"></p>
+
+<section>
+    <h2>Участники</h2>
+    <ul>
+        <li th:each="participant : ${participants}">
+            <span th:text="${participant.username}">username</span>
+            <span th:text="${participant.roomRole}">DEFAULT</span>
+        </li>
+    </ul>
+    <form th:action="@{/rooms/{id}/participants(id=${room.id})}" method="post">
+        <label>Добавить пользователя по имени:
+            <input type="text" name="username" required />
+        </label>
+        <button type="submit">Добавить</button>
+    </form>
+</section>
+
+<section>
+    <h2>Сообщения</h2>
+    <p th:if="${#lists.isEmpty(messages)}">Сообщений пока нет. Начните переписку.</p>
+    <div th:each="message : ${messages}" class="message">
+        <div class="message-meta">
+            <strong th:text="${message.senderName}">Автор</strong>
+            <span th:text="${#temporals.format(message.sentAt, 'dd.MM.yyyy HH:mm')}">дата</span>
+        </div>
+        <p th:text="${message.body}">Текст сообщения</p>
+    </div>
+
+    <form th:action="@{/rooms/{id}/messages(id=${room.id})}" method="post">
+        <label for="body">Новое сообщение</label>
+        <textarea id="body" name="body" maxlength="4000" required></textarea>
+        <button type="submit">Отправить</button>
+    </form>
+</section>
+</body>
+</html>
