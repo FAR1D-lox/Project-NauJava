@@ -71,7 +71,7 @@ public class RoomController {
         model.addAttribute("participants", participants);
         model.addAttribute("messages", messageService.getRoomMessages(userId, roomId));
         if (error != null) {
-            model.addAttribute("chatError", "Не удалось выполнить действие. Проверьте данные и права доступа.");
+            model.addAttribute("chatError", "The action could not be performed. Please check the data and access permissions.");
         }
         return "chat";
     }
@@ -99,7 +99,7 @@ public class RoomController {
         try {
             User invitedUser = userRepository.findByUsernameIgnoreCase(username.trim()).stream()
                     .findFirst()
-                    .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
             participantService.addParticipant(currentUserId(userDetails), roomId, invitedUser.getId());
             return "redirect:/rooms/" + roomId;
         } catch (RuntimeException exception) {
@@ -109,7 +109,7 @@ public class RoomController {
 
     private Long currentUserId(UserDetails userDetails) {
         return userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"))
+                .orElseThrow(() -> new EntityNotFoundException("User not found"))
                 .getId();
     }
 }

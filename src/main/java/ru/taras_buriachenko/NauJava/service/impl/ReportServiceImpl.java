@@ -52,11 +52,11 @@ public class ReportServiceImpl implements ReportService {
     public String getReportContent(Long reportId) {
         Report report = findReport(reportId);
         return switch (report.getStatus()) {
-            case CREATED -> "Отчет с id = " + reportId + " еще не сформирован. "
-                    + "Статус отчета: создан. Попробуйте запросить отчет позже.";
-            case ERROR -> "Отчет с id = " + reportId + " сформирован с ошибкой. "
-                    + "Статус отчета: ошибка. Причина: "
-                    + (report.getContent() == null ? "неизвестна" : report.getContent());
+            case CREATED -> "Report with id = " + reportId + " hasn't yet been generated. "
+                    + "Report status: created. Try request report later.";
+            case ERROR -> "Report with id = " + reportId + " has generated with error. "
+                    + "Report status: error. Reason: "
+                    + (report.getContent() == null ? "unknown" : report.getContent());
             case COMPLETED -> report.getContent();
         };
     }
@@ -130,7 +130,7 @@ public class ReportServiceImpl implements ReportService {
                         usersElapsed.get(), roomsElapsed.get(), totalElapsed));
                 resultStatus = ReportStatus.COMPLETED;
             } catch (Exception e) {
-                content = "Ошибка формирования отчета: " + e.getMessage();
+                content = "report generating caught error: " + e.getMessage();
                 resultStatus = ReportStatus.ERROR;
             }
 

@@ -30,14 +30,14 @@ public class UserController {
     public String registerUser(@ModelAttribute("user") RegisterRequestDto dto, Model model) {
         if (dto.getUsername() == null || dto.getUsername().isBlank()
                 || dto.getPassword() == null || dto.getPassword().isBlank()) {
-            model.addAttribute("registrationError", "Имя пользователя и пароль обязательны.");
+            model.addAttribute("registrationError", "Username and password are required");
             return "register";
         }
         try {
             userService.addUser(dto);
             return "redirect:/login?registered";
         } catch (RuntimeException exception) {
-            model.addAttribute("registrationError", "Не удалось создать аккаунт. Возможно, имя уже занято.");
+            model.addAttribute("registrationError", "Failed to create account. Maybe username already taken.");
             return "register";
         }
     }
