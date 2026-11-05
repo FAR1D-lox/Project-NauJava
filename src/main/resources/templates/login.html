@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <title>Вход в систему</title>
+</head>
+<body>
+<h2>Авторизация</h2>
+<!-- При ошибке Spring Security автоматически добавит параметр ?error -->
+<div th:if="${param.error}" style="color:red">Неверное имя пользователя или пароль!</div>
+<div th:if="${param.logout}" style="color:green">Вы успешно вышли из системы.</div>
+
+<form th:action="@{/login}" method="post">
+    <!-- Поля должны называться строго username и password для Spring Security по умолчанию -->
+    <label>Логин:</label>
+    <input type="text" name="username" required /><br/><br/>
+
+    <label>Пароль:</label>
+    <input type="password" name="password" required /><br/><br/>
+
+    <button type="submit">Войти</button>
+</form>
+<br/>
+<a th:href="@{/register}">Нет аккаунта? Зарегистрироваться</a>
+</body>
+</html>
