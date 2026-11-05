@@ -1,26 +1,21 @@
 package ru.taras_buriachenko.NauJava.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.taras_buriachenko.NauJava.type.UserRole;
 
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
-
-    public User() {
-    }
-
-    public User(Long id, String username, String passwordHash, String phoneNumber, LocalDateTime lastSeen, boolean isOnline, UserRole role) {
-        this.id = id;
-        this.username = username;
-        this.passwordHash = passwordHash;
-        this.phoneNumber = phoneNumber;
-        this.lastSeen = lastSeen;
-        this.isOnline = isOnline;
-        this.role = role;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,62 +39,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, columnDefinition = "varchar(255) default 'USER'")
     private UserRole role;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public UserRole getRole() {
-        return role;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public LocalDateTime getLastSeen() {
-        return lastSeen;
-    }
-
-    public void setLastSeen(LocalDateTime lastSeen) {
-        this.lastSeen = lastSeen;
-    }
-
-    public boolean isOnline() {
-        return isOnline;
-    }
-
-    public void setOnline(boolean online) {
-        isOnline = online;
-    }
-
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
 
     @Override
     public String toString() {

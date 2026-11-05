@@ -1,8 +1,10 @@
 package ru.taras_buriachenko.NauJava.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import ru.taras_buriachenko.NauJava.dto.ReportData;
 import ru.taras_buriachenko.NauJava.entity.Report;
@@ -13,7 +15,7 @@ import ru.taras_buriachenko.NauJava.repository.crud.RoomRepository;
 import ru.taras_buriachenko.NauJava.repository.crud.UserRepository;
 import ru.taras_buriachenko.NauJava.service.ReportService;
 import ru.taras_buriachenko.NauJava.type.ReportStatus;
-import ru.taras_buriachenko.NauJava.service.impl.ReportRenderer;
+import ru.taras_buriachenko.NauJava.service.ReportRenderer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +26,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
+@RequiredArgsConstructor
 public class ReportServiceImpl implements ReportService {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
@@ -35,31 +38,14 @@ public class ReportServiceImpl implements ReportService {
     private final PlatformTransactionManager transactionManager;
     private final ReportRenderer reportRenderer;
 
-    public ReportServiceImpl(ReportRepository reportRepository,
-                             UserRepository userRepository,
-                             RoomRepository roomRepository,
-                             PlatformTransactionManager transactionManager, ReportRenderer reportRenderer) {
-        this.reportRepository = reportRepository;
-        this.userRepository = userRepository;
-        this.roomRepository = roomRepository;
-        this.transactionManager = transactionManager;
-        this.reportRenderer = reportRenderer;
-    }
 
+    @Transactional
     @Override
     public Long createReport() {
-        TransactionStatus transactionStatus =
-                transactionManager.getTransaction(new DefaultTransactionDefinition());
-        try {
-            Report report = new Report();
-            report.setStatus(ReportStatus.CREATED);
-            reportRepository.save(report);
-            transactionManager.commit(transactionStatus);
-            return report.getId();
-        } catch (Exception e) {
-            transactionManager.rollback(transactionStatus);
-            throw e;
-        }
+        Report report = new Report();
+        report.setStatus(ReportStatus.CREATED);
+        reportRepository.save(report);
+        return report.getId();
     }
 
     @Override
@@ -160,6 +146,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     private void updateReport(Long reportId, ReportStatus status, String content) {
+        //Тут оставлю manager. Не хочу лишний раз выделять сервис или прокидывать сервис в самого себя через Lazy.
         TransactionStatus transactionStatus =
                 transactionManager.getTransaction(new DefaultTransactionDefinition());
         try {

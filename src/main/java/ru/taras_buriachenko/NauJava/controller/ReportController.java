@@ -1,5 +1,6 @@
 package ru.taras_buriachenko.NauJava.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +17,10 @@ import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("/reports")
-
+@RequiredArgsConstructor
 public class ReportController {
 
     private final ReportService reportService;
-
-    public ReportController(ReportService reportService) {
-        this.reportService = reportService;
-    }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ReportCreatedResponseDto> createReport() {

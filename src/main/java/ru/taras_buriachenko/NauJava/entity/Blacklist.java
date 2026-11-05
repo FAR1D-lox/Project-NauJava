@@ -1,16 +1,19 @@
 package ru.taras_buriachenko.NauJava.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.taras_buriachenko.NauJava.type.BlockDuration;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "blacklist")
+@Setter
+@Getter
+@NoArgsConstructor
 public class Blacklist {
-
-    public Blacklist() {
-    }
 
     @EmbeddedId
     private BlacklistId id;
@@ -33,48 +36,4 @@ public class Blacklist {
 
     @Column(name = "block_duration")
     private BlockDuration blockDuration;
-
-    public BlacklistId getId() {
-        return id;
-    }
-
-    public void setId(BlacklistId id) {
-        this.id = id;
-    }
-
-    public User getInitiator() {
-        return initiator;
-    }
-
-    public void setInitiator(User initiator) {
-        this.initiator = initiator;
-    }
-
-    public User getBlocked() {
-        return blocked;
-    }
-
-    public void setBlocked(User blocked) {
-        this.blocked = blocked;
-    }
-
-    public void setBlockedAt(LocalDateTime blockedAt) {
-        this.blockedAt = blockedAt;
-    }
-
-    public String getBlock_reason() {
-        return block_reason;
-    }
-
-    public void setBlock_reason(String block_reason) {
-        this.block_reason = block_reason;
-    }
-
-    public BlockDuration getBlockDuration() {
-        return blockDuration;
-    }
-
-    public void setBlockDuration(BlockDuration blockDuration) {
-        this.blockDuration = blockDuration;
-    }
 }

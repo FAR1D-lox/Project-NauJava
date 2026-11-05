@@ -1,11 +1,10 @@
 package ru.taras_buriachenko.NauJava.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.annotation.Transactional;
 import ru.taras_buriachenko.NauJava.dto.*;
 import ru.taras_buriachenko.NauJava.entity.User;
 import ru.taras_buriachenko.NauJava.repository.crud.UserRepository;
@@ -16,86 +15,59 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final PlatformTransactionManager transactionManager;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(
-            UserRepository userRepository,
-            PlatformTransactionManager transactionManager,
-            PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.transactionManager = transactionManager;
-        this.passwordEncoder = passwordEncoder;
-    }
 
-
+    @Transactional
     @Override
     public UserResponseDto addUser(RegisterRequestDto userInfo) {
-        TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
-        try {
-            User user = new User(
-                    null,
-                    userInfo.getUsername(),
-                    passwordEncoder.encode(userInfo.getPassword()),
-                    userInfo.getPhoneNumber(),
-                    LocalDateTime.now(),
-                    true,
-                    UserRole.USER
-            );
-            userRepository.save(user);
-            transactionManager.commit(status);
-            return new UserResponseDto(
-                    user.getId(),
-                    user.getUsername(),
-                    user.getLastSeen(),
-                    user.isOnline()
-            );
-        } catch (Exception e) {
-            transactionManager.rollback(status);
-            throw e;
-        }
+        User user = new User(
+                null,
+                userInfo.getUsername(),
+                passwordEncoder.encode(userInfo.getPassword()),
+                userInfo.getPhoneNumber(),
+                LocalDateTime.now(),
+                true,
+                UserRole.USER
+        );
+        userRepository.save(user);
+        return new UserResponseDto(
+                user.getId(),
+                user.getUsername(),
+                user.getLastSeen(),
+                user.isOnline()
+        );
     }
 
     @Override
+    @Transactional
     public UserResponseDto updateUser(Long userId, UpdateUserDto update) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User with id = " + userId + " not found"));
-        TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
-        try {
-            if (update.passwordHash() != null && !update.passwordHash().isBlank())
-                user.setPasswordHash(update.passwordHash());
-            if (update.phoneNumber() != null && !update.phoneNumber().isBlank())
-                user.setPhoneNumber(update.phoneNumber());
-            if (update.username() != null && !update.username().isBlank())
-                user.setUsername(update.username());
-            userRepository.save(user);
-            transactionManager.commit(status);
-            return new UserResponseDto(
-                    user.getId(),
-                    user.getUsername(),
-                    user.getLastSeen(),
-                    user.isOnline());
-        } catch (Exception e) {
-            transactionManager.rollback(status);
-            throw e;
-        }
+        if (update.passwordHash() != null && !update.passwordHash().isBlank())
+            user.setPasswordHash(update.passwordHash());
+        if (update.phoneNumber() != null && !update.phoneNumber().isBlank())
+            user.setPhoneNumber(update.phoneNumber());
+        if (update.username() != null && !update.username().isBlank())
+            user.setUsername(update.username());
+        userRepository.save(user);
+        return new UserResponseDto(
+                user.getId(),
+                user.getUsername(),
+                user.getLastSeen(),
+                user.isOnline());
     }
 
+    @Transactional
     @Override
     public void removeUser(Long userId) {
-        TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
-        try {
-            if (userRepository.deleteUserById(userId) == 0)
-                throw new EntityNotFoundException("User with id = " + userId + " not found");
-            transactionManager.commit(status);
-        } catch (Exception e) {
-            transactionManager.rollback(status);
-            throw e;
-        }
+        if (userRepository.deleteUserById(userId) == 0)
+            throw new EntityNotFoundException("User with id = " + userId + " not found");
     }
 
     @Override

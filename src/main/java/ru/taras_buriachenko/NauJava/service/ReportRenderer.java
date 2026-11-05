@@ -1,4 +1,4 @@
-package ru.taras_buriachenko.NauJava.service.impl;
+package ru.taras_buriachenko.NauJava.service;
 
 import ru.taras_buriachenko.NauJava.dto.ReportData;
 

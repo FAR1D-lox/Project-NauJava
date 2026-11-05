@@ -1,14 +1,17 @@
 package ru.taras_buriachenko.NauJava.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.taras_buriachenko.NauJava.type.ReportStatus;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "report")
+@NoArgsConstructor
 public class Report {
-
-    public Report() {
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,30 +24,6 @@ public class Report {
 
     @Column(name = "content", columnDefinition = "text")
     private String content;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public ReportStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ReportStatus status) {
-        this.status = status;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
     @Override
     public String toString() {

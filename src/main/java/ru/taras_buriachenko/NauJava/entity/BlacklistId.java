@@ -1,10 +1,17 @@
 package ru.taras_buriachenko.NauJava.entity;
 
 import jakarta.persistence.Embeddable;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@Getter
+@Setter
+// @EqualsAndHashCode не буду использовать.
+// Насколько я помню, он неправильно работает с составными ключами
 @Embeddable
 public class BlacklistId implements Serializable {
 
@@ -18,22 +25,6 @@ public class BlacklistId implements Serializable {
 
     private Long initiatorId;
     private Long blockedId;
-
-    public Long getInitiatorId() {
-        return initiatorId;
-    }
-
-    public void setInitiatorId(Long initiatorId) {
-        this.initiatorId = initiatorId;
-    }
-
-    public Long getBlockedId() {
-        return blockedId;
-    }
-
-    public void setBlockedId(Long blockedId) {
-        this.blockedId = blockedId;
-    }
 
     @Override
     public boolean equals(Object o) {

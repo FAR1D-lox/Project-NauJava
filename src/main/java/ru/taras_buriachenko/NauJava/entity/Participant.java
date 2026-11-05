@@ -1,16 +1,20 @@
 package ru.taras_buriachenko.NauJava.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.taras_buriachenko.NauJava.type.ParticipantRole;
 
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "participants")
 public class Participant {
 
-    public Participant() {
-    }
 
     @EmbeddedId
     private ParticipantId id;
@@ -33,51 +37,4 @@ public class Participant {
     @Column(name = "room_custom_username")
     private String roomCustomUsername;
 
-    public ParticipantId getId() {
-        return id;
-    }
-
-    public void setId(ParticipantId id) {
-        this.id = id;
-    }
-
-    public Room getRoom() {
-        return room;
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public ParticipantRole getRole() {
-        return role;
-    }
-
-    public void setRole(ParticipantRole role) {
-        this.role = role;
-    }
-
-    public LocalDateTime getJoinedAt() {
-        return joinedAt;
-    }
-
-    public void setJoinedAt(LocalDateTime joinedAt) {
-        this.joinedAt = joinedAt;
-    }
-
-    public String getRoomCustomUsername() {
-        return roomCustomUsername;
-    }
-
-    public void setRoomCustomUsername(String roomCustomUsername) {
-        this.roomCustomUsername = roomCustomUsername;
-    }
 }

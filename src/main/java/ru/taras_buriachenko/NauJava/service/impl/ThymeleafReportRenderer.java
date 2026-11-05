@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import ru.taras_buriachenko.NauJava.dto.ReportData;
-import ru.taras_buriachenko.NauJava.service.impl.ReportRenderer;
+import ru.taras_buriachenko.NauJava.service.ReportRenderer;
 
 import java.util.Locale;
 

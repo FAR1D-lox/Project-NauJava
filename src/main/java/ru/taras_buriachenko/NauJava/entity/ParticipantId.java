@@ -1,10 +1,14 @@
 package ru.taras_buriachenko.NauJava.entity;
 
 import jakarta.persistence.Embeddable;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@Setter
+@Getter
 @Embeddable
 public class ParticipantId implements Serializable {
 
@@ -19,22 +23,6 @@ public class ParticipantId implements Serializable {
     private Long roomId;
 
     private Long userId;
-
-    public Long getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(Long roomId) {
-        this.roomId = roomId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 
     @Override
     public boolean equals(Object o) {

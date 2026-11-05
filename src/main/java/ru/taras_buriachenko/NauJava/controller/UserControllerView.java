@@ -1,5 +1,6 @@
 package ru.taras_buriachenko.NauJava.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,14 +11,10 @@ import ru.taras_buriachenko.NauJava.repository.crud.UserRepository;
 
 @Controller
 @RequestMapping("/custom/users/view")
+@RequiredArgsConstructor
 public class UserControllerView {
 
     private final UserRepository userRepository;
-
-    public UserControllerView(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
 
     @GetMapping("/list")
     public String userListView(Model model) {
