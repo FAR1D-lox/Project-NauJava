@@ -1,6 +1,7 @@
 package ru.taras_buriachenko.NauJava.entity;
 
 import jakarta.persistence.*;
+import ru.taras_buriachenko.NauJava.type.BlockDuration;
 
 import java.time.LocalDateTime;
 
@@ -27,6 +28,12 @@ public class Blacklist {
     @Column(name = "blocked_at")
     private LocalDateTime blockedAt;
 
+    @Column(name = "block_reason")
+    private String block_reason;
+
+    @Column(name = "block_duration")
+    private BlockDuration blockDuration;
+
     public BlacklistId getId() {
         return id;
     }
@@ -51,11 +58,23 @@ public class Blacklist {
         this.blocked = blocked;
     }
 
-    public LocalDateTime getBlockedAt() {
-        return blockedAt;
-    }
-
     public void setBlockedAt(LocalDateTime blockedAt) {
         this.blockedAt = blockedAt;
+    }
+
+    public String getBlock_reason() {
+        return block_reason;
+    }
+
+    public void setBlock_reason(String block_reason) {
+        this.block_reason = block_reason;
+    }
+
+    public BlockDuration getBlockDuration() {
+        return blockDuration;
+    }
+
+    public void setBlockDuration(BlockDuration blockDuration) {
+        this.blockDuration = blockDuration;
     }
 }

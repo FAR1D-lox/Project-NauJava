@@ -1,6 +1,7 @@
 package ru.taras_buriachenko.NauJava.entity;
 
 import jakarta.persistence.*;
+import ru.taras_buriachenko.NauJava.type.NotificationType;
 
 import java.time.LocalDateTime;
 
@@ -27,8 +28,11 @@ public class Notification {
     @Column(name = "is_muted")
     private boolean isMuted = false;
 
-    @Column(name = "is_read")
-    private boolean isRead = false;
+    @Column(name = "notification_type", nullable = false)
+    private NotificationType type;
+
+    @Column(name = "message")
+    private String message;
 
     public NotificationId getId() {
         return id;
@@ -62,11 +66,19 @@ public class Notification {
         isMuted = muted;
     }
 
-    public boolean isRead() {
-        return isRead;
+    public NotificationType getType() {
+        return type;
     }
 
-    public void setRead(boolean read) {
-        isRead = read;
+    public void setType(NotificationType type) {
+        this.type = type;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
