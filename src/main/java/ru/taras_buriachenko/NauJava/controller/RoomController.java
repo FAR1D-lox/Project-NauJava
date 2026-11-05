@@ -1,6 +1,7 @@
 package ru.taras_buriachenko.NauJava.controller;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import ru.taras_buriachenko.NauJava.type.RoomType;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class RoomController {
 
     private final RoomService roomService;
@@ -31,20 +33,6 @@ public class RoomController {
     private final MessageService messageService;
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
-
-    public RoomController(
-            RoomService roomService,
-            ParticipantService participantService,
-            MessageService messageService,
-            RoomRepository roomRepository,
-            UserRepository userRepository
-    ) {
-        this.roomService = roomService;
-        this.participantService = participantService;
-        this.messageService = messageService;
-        this.roomRepository = roomRepository;
-        this.userRepository = userRepository;
-    }
 
     @PostMapping("/rooms")
     public String createRoom(

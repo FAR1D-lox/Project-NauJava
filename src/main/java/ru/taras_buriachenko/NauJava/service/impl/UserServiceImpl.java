@@ -66,12 +66,12 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User with id = " + userId + " not found"));
         TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
         try {
-            if (update.getPasswordHash() != null && !update.getPasswordHash().isBlank())
-                user.setPasswordHash(update.getPasswordHash());
-            if (update.getPhoneNumber() != null && !update.getPhoneNumber().isBlank())
-                user.setPhoneNumber(update.getPhoneNumber());
-            if (update.getUsername() != null && !update.getUsername().isBlank())
-                user.setUsername(update.getUsername());
+            if (update.passwordHash() != null && !update.passwordHash().isBlank())
+                user.setPasswordHash(update.passwordHash());
+            if (update.phoneNumber() != null && !update.phoneNumber().isBlank())
+                user.setPhoneNumber(update.phoneNumber());
+            if (update.username() != null && !update.username().isBlank())
+                user.setUsername(update.username());
             userRepository.save(user);
             transactionManager.commit(status);
             return new UserResponseDto(

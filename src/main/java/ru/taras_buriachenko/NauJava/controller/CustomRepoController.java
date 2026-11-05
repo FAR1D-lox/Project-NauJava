@@ -1,5 +1,6 @@
 package ru.taras_buriachenko.NauJava.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,14 +15,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/custom/find")
+@RequiredArgsConstructor
 public class CustomRepoController {
 
     private final CustomChatRepository customRepository;
-
-    @Autowired
-    public CustomRepoController(CustomChatRepository customRepository) {
-        this.customRepository = customRepository;
-    }
 
     @GetMapping("/staleOnlineUsers")
     List<User> findStaleOnlineUsers(@RequestBody LocalDateTime dateTime) {

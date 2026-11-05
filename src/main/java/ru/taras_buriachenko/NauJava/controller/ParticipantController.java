@@ -1,5 +1,6 @@
 package ru.taras_buriachenko.NauJava.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -14,15 +15,12 @@ import ru.taras_buriachenko.NauJava.type.RoomType;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class ParticipantController {
 
     private final ParticipantService participantService;
     private final UserRepository userRepository;
 
-    public ParticipantController(ParticipantService participantService, UserRepository userRepository) {
-        this.participantService = participantService;
-        this.userRepository = userRepository;
-    }
 
     @GetMapping("/home")
     public String homePage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
