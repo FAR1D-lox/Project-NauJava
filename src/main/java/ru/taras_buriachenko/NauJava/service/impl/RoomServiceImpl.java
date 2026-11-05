@@ -33,7 +33,7 @@ public class RoomServiceImpl implements RoomService {
         this.roomRepository = roomRepository;
         this.participantRepository = participantRepository;
         this.userRepository = userRepository;
-        this.transactionManager = transactionManager;;
+        this.transactionManager = transactionManager;
     }
 
     @Override

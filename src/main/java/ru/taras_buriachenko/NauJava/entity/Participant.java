@@ -30,6 +30,9 @@ public class Participant {
     @Column(name = "joined_at")
     private LocalDateTime joinedAt;
 
+    @Column(name = "room_custom_username")
+    private String roomCustomUsername;
+
     public ParticipantId getId() {
         return id;
     }
@@ -68,5 +71,13 @@ public class Participant {
 
     public void setJoinedAt(LocalDateTime joinedAt) {
         this.joinedAt = joinedAt;
+    }
+
+    public String getRoomCustomUsername() {
+        return roomCustomUsername;
+    }
+
+    public void setRoomCustomUsername(String roomCustomUsername) {
+        this.roomCustomUsername = roomCustomUsername;
     }
 }
