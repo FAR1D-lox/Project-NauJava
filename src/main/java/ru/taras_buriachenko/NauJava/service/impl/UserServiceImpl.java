@@ -1,5 +1,6 @@
 package ru.taras_buriachenko.NauJava.service.impl;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserResponseDto addUser(RegisterRequestDto userInfo) {
+        if (userRepository.existsByUsername(userInfo.getUsername())) {
+            throw new EntityExistsException("User with username " + userInfo.getUsername() + " has already exists");
+        }
         User user = new User(
                 null,
                 userInfo.getUsername(),
@@ -45,16 +49,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponseDto updateUser(Long userId, UpdateUserDto update) {
+    public UserResponseDto updateUser(Long userId, UserUpdateDto update) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User with id = " + userId + " not found"));
-        if (update.passwordHash() != null && !update.passwordHash().isBlank())
-            user.setPasswordHash(update.passwordHash());
+        if (update.password() != null && !update.password().isBlank())
+            user.setPasswordHash(passwordEncoder.encode(update.password()));
         if (update.phoneNumber() != null && !update.phoneNumber().isBlank())
             user.setPhoneNumber(update.phoneNumber());
-        if (update.username() != null && !update.username().isBlank())
+        if (update.username() != null && !update.username().isBlank()) {
+            if (userRepository.existsByUsername(update.username()) && !update.username().equals(user.getUsername()))
+                throw new EntityExistsException("User with username " + update.username() + " has already exists");
             user.setUsername(update.username());
+        }
         userRepository.save(user);
         return new UserResponseDto(
                 user.getId(),

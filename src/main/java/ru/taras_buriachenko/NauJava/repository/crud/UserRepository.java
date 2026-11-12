@@ -26,4 +26,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
     long deleteUserById(Long id);
 
     List<User> findByPhoneNumber(String phoneNumber);
+
+    boolean existsByUsername(String username);
 }
