@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Мой рабочий стол — Мои комнаты</title>
+    <style>
+        table { width: 70%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #dddddd; text-align: left; padding: 10px; }
+        th { background-color: #f2f2f2; }
+        .no-rooms { font-style: italic; color: gray; margin-top: 15px; }
+    </style>
+</head>
+<body>
+<h1>Добро пожаловать, <span th:text="${currentUsername}">Пользователь</span>!</h1>
+
+<p th:if="${homeError}" th:text="${homeError}" style="color: #a00"></p>
+
+<h3>Создать комнату</h3>
+<form th:action="@{/rooms}" method="post">
+    <label>Название:
+        <input type="text" name="title" maxlength="120" required />
+    </label>
+    <label>Тип:
+        <select name="type" required>
+            <option th:each="roomType : ${roomTypes}"
+                    th:value="${roomType}"
+                    th:text="${roomType}">GROUP</option>
+        </select>
+    </label>
+    <button type="submit">Создать</button>
+</form>
+
+<h3>Список ваших комнат (чатов):</h3>
+
+<div th:if="${#lists.isEmpty(rooms)}" class="no-rooms">
+    Вы пока не состоите ни в одной комнате.
+</div>
+
+<div th:if="${not #lists.isEmpty(rooms)}">
+    <table>
+        <thead>
+        <tr>
+            <th>ID Комнаты</th>
+            <th>Название (Title)</th>
+            <th>Тип комнаты</th>
+            <th>Дата создания</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="room : ${rooms}">
+                        <td th:text="${room.id}">1</td>
+            <td><a th:href="@{/rooms/{id}(id=${room.id})}" th:text="${room.title}">Общий чат</a></td>
+            <td th:text="${room.type}">PUBLIC</td>
+            <td th:text="${#temporals.format(room.createdAt, 'dd.MM.yyyy HH:mm')}">29.10.2026 15:00</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<br/><br/>
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Выйти из аккаунта</button>
+</form>
+</body>
+</html>
