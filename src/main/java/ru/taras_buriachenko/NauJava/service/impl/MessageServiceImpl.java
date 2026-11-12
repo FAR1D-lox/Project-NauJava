@@ -103,40 +103,26 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message showMessage(Long userId, Long messageId) {
-        TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
-        try {
-            Message message = findMessage(messageId);
-            requireMembership(userId, message.getRoom().getId());
-            transactionManager.commit(status);
-            return message;
-        } catch (Exception e) {
-            transactionManager.rollback(status);
-            throw e;
-        }
+        Message message = findMessage(messageId);
+        requireMembership(userId, message.getRoom().getId());
+        return message;
     }
 
     @Override
     public List<MessageResponseDto> getRoomMessages(Long userId, Long roomId) {
-        TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
-        try {
-            requireMembership(userId, roomId);
-            transactionManager.commit(status);
-            return messageRepository.findRoomMessagesWithSender(roomId).stream()
-                    .map(message -> new MessageResponseDto(
-                            message.getId(),
-                            message.getSender().getId(),
-                            message.getSender().getUsername(),
-                            roomId,
-                            message.getBody(),
-                            message.getFilePath(),
-                            message.isRead(),
-                            message.getSentAt()
-                    ))
-                    .toList();
-        } catch (Exception e) {
-            transactionManager.rollback(status);
-            throw e;
-        }
+        requireMembership(userId, roomId);
+        return messageRepository.findRoomMessagesWithSender(roomId).stream()
+                .map(message -> new MessageResponseDto(
+                        message.getId(),
+                        message.getSender().getId(),
+                        message.getSender().getUsername(),
+                        roomId,
+                        message.getBody(),
+                        message.getFilePath(),
+                        message.isRead(),
+                        message.getSentAt()
+                ))
+                .toList();
     }
 
     private Message findMessage(Long messageId) {
