@@ -1,62 +1,96 @@
 package ru.taras_buriachenko.NauJava.service.impl;
 
-import jakarta.annotation.PostConstruct;
-import org.springframework.stereotype.Component;
-import ru.taras_buriachenko.NauJava.config.Config;
-import ru.taras_buriachenko.NauJava.repository.impl.UserRepository;
-import ru.taras_buriachenko.NauJava.entity.user.User;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.taras_buriachenko.NauJava.dto.*;
+import ru.taras_buriachenko.NauJava.entity.User;
+import ru.taras_buriachenko.NauJava.repository.crud.UserRepository;
 import ru.taras_buriachenko.NauJava.service.UserService;
+import ru.taras_buriachenko.NauJava.type.UserRole;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Component
+@Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    private final Config config;
 
-    public UserServiceImpl(UserRepository userRepository, Config config) {
-        this.userRepository = userRepository;
-        this.config = config;
+    @Transactional
+    @Override
+    public UserResponseDto addUser(RegisterRequestDto userInfo) {
+        User user = new User(
+                null,
+                userInfo.getUsername(),
+                passwordEncoder.encode(userInfo.getPassword()),
+                userInfo.getPhoneNumber(),
+                LocalDateTime.now(),
+                true,
+                UserRole.USER
+        );
+        userRepository.save(user);
+        return new UserResponseDto(
+                user.getId(),
+                user.getUsername(),
+                user.getLastSeen(),
+                user.isOnline()
+        );
     }
 
     @Override
-    public void createUser(Long id, String username, String phoneNumber) {
-        User user = new User(id, username, phoneNumber);
-        userRepository.create(user);
+    @Transactional
+    public UserResponseDto updateUser(Long userId, UpdateUserDto update) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User with id = " + userId + " not found"));
+        if (update.passwordHash() != null && !update.passwordHash().isBlank())
+            user.setPasswordHash(update.passwordHash());
+        if (update.phoneNumber() != null && !update.phoneNumber().isBlank())
+            user.setPhoneNumber(update.phoneNumber());
+        if (update.username() != null && !update.username().isBlank())
+            user.setUsername(update.username());
+        userRepository.save(user);
+        return new UserResponseDto(
+                user.getId(),
+                user.getUsername(),
+                user.getLastSeen(),
+                user.isOnline());
+    }
+
+    @Transactional
+    @Override
+    public void removeUser(Long userId) {
+        if (userRepository.deleteUserById(userId) == 0)
+            throw new EntityNotFoundException("User with id = " + userId + " not found");
     }
 
     @Override
-    public User findById(Long id) {
-        return userRepository.read(id);
+    public List<UserResponseDto> searchUserByUsername(String username) {
+        return userRepository.findByUsernameIgnoreCase(username)
+                .stream().map(user ->
+                        new UserResponseDto(
+                                user.getId(),
+                                user.getUsername(),
+                                user.getLastSeen(),
+                                user.isOnline()
+                        )).toList();
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
-    }
-
-    @Override
-    public void updateUser(Long id, String newUsername, String newPhoneNumber) {
-        User currentUser = userRepository.read(id);
-        if (newUsername != null && !newUsername.isEmpty()) {
-            currentUser.setUsername(newUsername);
-        }
-        if (newPhoneNumber != null && newPhoneNumber.substring(0, 2).equals("+7") && newPhoneNumber.length() == 12) {
-            currentUser.setPhoneNumber(newPhoneNumber);
-        }
-        userRepository.update(currentUser);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        userRepository.delete(id);
-    }
-
-    @PostConstruct
-    public void consoleWrite() {
-        System.out.println("Application name: " + config.getAppName() + "\n" +
-                "Application version: " + config.getAppVersion());
+    public List<UserResponseDto> searchUserByPhoneNumber(String phoneNumber) {
+        return userRepository.findByPhoneNumber(phoneNumber)
+                .stream().map(user ->
+                        new UserResponseDto(
+                                user.getId(),
+                                user.getUsername(),
+                                user.getLastSeen(),
+                                user.isOnline()
+                        )).toList();
     }
 }

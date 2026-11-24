@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Отчет по статистике приложения</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f6f8; margin: 0; padding: 32px; color: #222; }
+        .card { max-width: 960px; margin: 0 auto; background: #fff; border-radius: 10px;
+                padding: 24px 32px 32px; box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+        h1 { font-size: 22px; margin: 0 0 4px; }
+        .subtitle { color: #666; font-size: 13px; margin-bottom: 24px; }
+        h2 { font-size: 16px; margin: 24px 0 8px; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th, td { border: 1px solid #dfe3e8; padding: 8px 10px; text-align: left; }
+        th { background: #eef1f5; }
+        tbody tr:nth-child(even) { background: #fafbfc; }
+        .empty { text-align: center; color: #888; }
+        .highlight { font-size: 28px; font-weight: bold; color: #1a6dd1; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Отчет по статистике приложения</h1>
+    <div class="subtitle" th:text="'Сформирован: ' + ${generatedAt}">Сформирован: 01.01.2025 12:00:00</div>
+
+    <h2>1. Количество зарегистрированных пользователей</h2>
+    <div class="highlight" th:text="${usersCount}">0</div>
+
+    <h2>2. Список комнат</h2>
+    <table>
+        <thead>
+        <tr><th>ID</th><th>Название</th><th>Тип</th><th>Дата создания</th></tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(rooms)}">
+            <td colspan="4" class="empty">В системе нет ни одной комнаты</td>
+        </tr>
+        <tr th:each="room : ${rooms}">
+            <td th:text="${room.id}">1</td>
+            <td th:text="${room.title}">Общий чат</td>
+            <td th:text="${room.type != null ? room.type : '—'}">GROUP</td>
+            <td th:text="${room.createdAt != null ? room.createdAt : '—'}">01.01.2025 12:00:00</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>3. Затраченное время</h2>
+    <table>
+        <tbody>
+        <tr>
+            <td>Подсчет количества пользователей</td>
+            <td th:text="${usersElapsedMs} + ' мс'">0 мс</td>
+        </tr>
+        <tr>
+            <td>Получение списка комнат</td>
+            <td th:text="${roomsElapsedMs} + ' мс'">0 мс</td>
+        </tr>
+        <tr>
+            <td><b>Общее время формирования отчета</b></td>
+            <td><b th:text="${totalElapsedMs} + ' мс'">0 мс</b></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
