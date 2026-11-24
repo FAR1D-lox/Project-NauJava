@@ -15,6 +15,7 @@ import ru.taras_buriachenko.NauJava.repository.crud.RoomRepository;
 import ru.taras_buriachenko.NauJava.repository.crud.UserRepository;
 import ru.taras_buriachenko.NauJava.service.RoomService;
 import ru.taras_buriachenko.NauJava.type.RoomType;
+import ru.taras_buriachenko.NauJava.type.UserRole;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -49,8 +50,9 @@ class NauJavaApplicationTests {
         User user = new User();
         user.setUsername("user_" + UUID.randomUUID().toString().substring(0, 8));
         user.setPasswordHash("hash_secure");
-        user.setOnline(isOnline);
+                user.setOnline(isOnline);
         user.setLastSeen(lastSeen);
+        user.setRole(UserRole.USER);
         return userRepository.save(user);
     }
 
