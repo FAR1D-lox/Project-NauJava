@@ -1,6 +1,5 @@
 package ru.taras_buriachenko.NauJava.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +18,6 @@ public class CustomRepoController {
 
     private final CustomChatRepository customRepository;
 
-    @Autowired
     public CustomRepoController(CustomChatRepository customRepository) {
         this.customRepository = customRepository;
     }
