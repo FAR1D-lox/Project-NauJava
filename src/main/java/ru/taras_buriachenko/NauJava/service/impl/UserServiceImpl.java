@@ -1,62 +1,72 @@
 package ru.taras_buriachenko.NauJava.service.impl;
 
-import jakarta.annotation.PostConstruct;
-import org.springframework.stereotype.Component;
-import ru.taras_buriachenko.NauJava.config.Config;
-import ru.taras_buriachenko.NauJava.repository.impl.UserRepository;
-import ru.taras_buriachenko.NauJava.entity.user.User;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+import ru.taras_buriachenko.NauJava.dto.*;
+import ru.taras_buriachenko.NauJava.entity.User;
+import ru.taras_buriachenko.NauJava.repository.crud.UserRepository;
 import ru.taras_buriachenko.NauJava.service.UserService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Component
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PlatformTransactionManager transactionManager;
 
-    private final Config config;
-
-    public UserServiceImpl(UserRepository userRepository, Config config) {
+    public UserServiceImpl(UserRepository userRepository, PlatformTransactionManager transactionManager) {
         this.userRepository = userRepository;
-        this.config = config;
+        this.transactionManager = transactionManager;
     }
 
-    @Override
-    public void createUser(Long id, String username, String phoneNumber) {
-        User user = new User(id, username, phoneNumber);
-        userRepository.create(user);
-    }
 
     @Override
-    public User findById(Long id) {
-        return userRepository.read(id);
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
-    }
-
-    @Override
-    public void updateUser(Long id, String newUsername, String newPhoneNumber) {
-        User currentUser = userRepository.read(id);
-        if (newUsername != null && !newUsername.isEmpty()) {
-            currentUser.setUsername(newUsername);
+    public LoginResponseDto register(RegisterRequestDto userInfo) {
+        TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+        try {
+            User user = new User(
+                    null,
+                    userInfo.getUsername(),
+                    userInfo.getPassword(),
+                    userInfo.getPhoneNumber(),
+                    LocalDateTime.now(),
+                    true
+            );
+            userRepository.save(user);
+            transactionManager.commit(status);
+            return new LoginResponseDto("Какой-то токен, пока не определились какой");
+        } catch (Exception e) {
+            transactionManager.rollback(status);
+            throw e;
         }
-        if (newPhoneNumber != null && newPhoneNumber.substring(0, 2).equals("+7") && newPhoneNumber.length() == 12) {
-            currentUser.setPhoneNumber(newPhoneNumber);
-        }
-        userRepository.update(currentUser);
     }
 
     @Override
-    public void deleteById(Long id) {
-        userRepository.delete(id);
+    public LoginResponseDto login(LoginRequestDto info) {
+        return null;
     }
 
-    @PostConstruct
-    public void consoleWrite() {
-        System.out.println("Application name: " + config.getAppName() + "\n" +
-                "Application version: " + config.getAppVersion());
+    @Override
+    public UserResponseDto updateUser(Long userId, UpdateUserDto dto) {
+        return null;
+    }
+
+    @Override
+    public void removeUser(Long userId) {
+
+    }
+
+    @Override
+    public List<User> searchUserByUsername(String username) {
+        return List.of();
+    }
+
+    @Override
+    public User searchUserByPhoneNumber(String phoneNumber) {
+        return null;
     }
 }

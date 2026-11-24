@@ -1,13 +1,15 @@
 package ru.taras_buriachenko.NauJava.service;
 
-import ru.taras_buriachenko.NauJava.entity.user.User;
+import ru.taras_buriachenko.NauJava.dto.*;
+import ru.taras_buriachenko.NauJava.entity.User;
 
 import java.util.List;
 
 public interface UserService {
-    void createUser(Long id, String username, String phoneNumber);
-    User findById(Long id);
-    List<User> getAllUsers();
-    void updateUser(Long id, String newUsername, String newNumber);
-    void deleteById(Long id);
+    LoginResponseDto register(RegisterRequestDto info);
+    LoginResponseDto login(LoginRequestDto info);
+    UserResponseDto updateUser(Long userId, UpdateUserDto dto);
+    void removeUser(Long userId);
+    List<User> searchUserByUsername(String username);
+    User searchUserByPhoneNumber(String phoneNumber);
 }
