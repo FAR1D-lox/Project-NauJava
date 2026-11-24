@@ -149,7 +149,7 @@ class NauJavaApplicationTests {
         long participantCountBefore = participantRepository.count();
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            roomService.createRoom("error_room", RoomType.ONE_ON_ONE, creator.getId());
+            roomService.createRoom("", RoomType.ONE_ON_ONE, creator.getId());
         });
 
         Assertions.assertEquals(roomCountBefore, roomRepository.count());
