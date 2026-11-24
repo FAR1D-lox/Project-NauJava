@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список пользователей</title>
+</head>
+<body>
+<h1>Список пользователей</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Имя пользователя</th>
+        <th>Номер телефона</th>
+        <th>Был в сети</th>
+        <th>Статус</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.phoneNumber}"></td>
+        <td th:text="${user.lastSeen != null ? #temporals.format(user.lastSeen, 'dd.MM.yyyy HH:mm') : 'Нет данных'}"></td>
+        <td th:text="${user.online ? 'В сети' : 'Не в сети'}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
